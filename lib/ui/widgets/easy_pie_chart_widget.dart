@@ -74,7 +74,7 @@ class EasyPieChart extends StatelessWidget {
     this.showValue = true,
     this.start = -90,
     this.gap = 0.0,
-    this.borderWidth = 20.0,
+    this.borderWidth = 12.0,
     this.borderEdge = StrokeCap.round,
     this.shouldAnimate = true,
     this.animateDuration,
