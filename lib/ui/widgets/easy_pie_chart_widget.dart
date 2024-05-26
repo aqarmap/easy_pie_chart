@@ -64,6 +64,7 @@ class EasyPieChart extends StatelessWidget {
 
   /// Function triggered when a pie slice is tapped. Provides the index of the pie value.
   final void Function(int index)? onTap;
+
   const EasyPieChart({
     Key? key,
     required this.children,
@@ -106,26 +107,23 @@ class EasyPieChart extends StatelessWidget {
     int activeIndex = 0;
     return StatefulBuilder(builder: (context, setState) {
       print('Rebuild pieChartWidget From StatefulBuilder ');
+      print('Rebuild pieChartWidget with ActiveIndex=$activeIndex');
       return GestureDetector(
         onTapUp: onTap == null
             ? null
             : (details) {
+                final int index = getIndexOfTappedPie(
+                        pieValues,
+                        total,
+                        gap,
+                        getAngleIn360(start),
+                        getAngleFromCordinates(details.localPosition.dx,
+                            details.localPosition.dy, size / 2)) ??
+                    0;
                 setState(() {
-                  final int index = getIndexOfTappedPie(
-                          pieValues,
-                          total,
-                          gap,
-                          getAngleIn360(start),
-                          getAngleFromCordinates(details.localPosition.dx,
-                              details.localPosition.dy, size / 2)) ??
-                      0;
                   // if (index == null) return;
-                  print('Before setState index= $index');
-                  print('Before etState activeIndex= $activeIndex');
                   activeIndex = index;
                   onTap!(index);
-                  print('After setState index= $index');
-                  print('After etState activeIndex= $activeIndex');
                 });
               },
         child: SizedBox(
@@ -133,21 +131,21 @@ class EasyPieChart extends StatelessWidget {
           width: size,
           child: CustomPaint(
             painter: _PieChartPainter(
-                pies: children,
-                pieValues:
-                    pieValues.map((pieValue) => pieValue * value).toList(),
-                total: total,
-                showValue: showValue,
-                startAngle: start,
-                pieType: pieType,
-                animateFromEnd: animateFromEnd,
-                centerText: child != null ? null : centerText,
-                style: style,
-                centerStyle: centerStyle,
-                gap: gap,
-                borderEdge: borderEdge,
-                borderWidth: borderWidth,
-                activeIndex: activeIndex),
+              pies: children,
+              pieValues: pieValues.map((pieValue) => pieValue * value).toList(),
+              total: total,
+              showValue: showValue,
+              startAngle: start,
+              pieType: pieType,
+              animateFromEnd: animateFromEnd,
+              centerText: child != null ? null : centerText,
+              style: style,
+              centerStyle: centerStyle,
+              gap: gap,
+              borderEdge: borderEdge,
+              borderWidth: borderWidth,
+              activeIndex: activeIndex,
+            ),
             child: child,
           ),
         ),
