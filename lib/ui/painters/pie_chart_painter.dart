@@ -14,7 +14,7 @@ class _PieChartPainter extends CustomPainter {
   final TextStyle? centerStyle;
   final double borderWidth;
   final bool animateFromEnd;
-
+  final int activeIndex;
   _PieChartPainter({
     required this.pieValues,
     required this.pies,
@@ -26,6 +26,7 @@ class _PieChartPainter extends CustomPainter {
     required this.borderEdge,
     required this.borderWidth,
     required this.animateFromEnd,
+    required this.activeIndex,
     this.centerText,
     this.style,
     this.centerStyle,
@@ -53,12 +54,14 @@ class _PieChartPainter extends CustomPainter {
       /// if gap is greater than 0 and current index is not divisible,
       /// it means current pie is a gap arc so it color will be transparent
       drawPieArc(
-          pieValues[index],
-          gap > 0.0 && index % 2 != 0
-              ? Colors.transparent
-              : pies[index ~/ (gap == 0.0 ? 1 : 2)].color,
-          size,
-          canvas);
+        pieValues[index],
+        gap > 0.0 && index % 2 != 0
+            ? Colors.transparent
+            : pies[index ~/ (gap == 0.0 ? 1 : 2)].color,
+        size,
+        canvas,
+        activeIndex == index,
+      );
 
       /// If showValue is set to true, the pieValue may be displayed. Additionally,
       /// if gap equals 0.0 or if the index is divisible by a 2,
@@ -83,7 +86,8 @@ class _PieChartPainter extends CustomPainter {
     return true;
   }
 
-  void drawPieArc(double pieValue, Color pieColor, Size size, Canvas canvas) {
+  void drawPieArc(double pieValue, Color pieColor, Size size, Canvas canvas,
+      bool isActive) {
     // Draw the curved border for the partition
     final radius = size.width / 2;
     final rect = Rect.fromCircle(
@@ -98,7 +102,7 @@ class _PieChartPainter extends CustomPainter {
           pieType == PieType.fill ? PaintingStyle.fill : PaintingStyle.stroke
 
       /// Set border width
-      ..strokeWidth = borderWidth
+      ..strokeWidth = isActive ? borderWidth * 2 : borderWidth
       ..strokeCap = borderEdge;
     canvas.drawArc(
       rect,
