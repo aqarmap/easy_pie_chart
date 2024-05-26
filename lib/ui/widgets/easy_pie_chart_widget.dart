@@ -70,7 +70,7 @@ class EasyPieChart extends StatelessWidget {
     this.showValue = true,
     this.start = -90,
     this.gap = 0.0,
-    this.borderWidth = 20.0,
+    this.borderWidth = 14.0,
     this.borderEdge = StrokeCap.round,
     this.shouldAnimate = true,
     this.animateDuration,
@@ -116,8 +116,12 @@ class EasyPieChart extends StatelessWidget {
                         details.localPosition.dy, size / 2));
                 if (index == null) return;
                 setState(() {
+                  print('Before setState index= $index');
+                  print('Before etState activeIndex= $activeIndex');
                   activeIndex = index;
                   onTap!(index);
+                  print('After setState index= $index');
+                  print('After etState activeIndex= $activeIndex');
                 });
               },
         child: SizedBox(
