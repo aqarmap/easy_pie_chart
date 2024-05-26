@@ -86,6 +86,7 @@ class EasyPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Build context of EasyPieChart');
     final List<double> pieValues = getValues(children, gap);
     final double total =
         pieValues.reduce(((value, element) => value + element));
@@ -101,8 +102,10 @@ class EasyPieChart extends StatelessWidget {
   }
 
   Widget pieChartWidget(List<double> pieValues, double total, double value) {
+    print('Rebuild pieChartWidget From start');
     int activeIndex = 0;
     return StatefulBuilder(builder: (context, setState) {
+      print('Rebuild pieChartWidget From StatefulBuilder ');
       return GestureDetector(
         onTapUp: onTap == null
             ? null
