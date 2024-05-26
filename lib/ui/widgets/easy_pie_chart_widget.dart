@@ -101,42 +101,49 @@ class EasyPieChart extends StatelessWidget {
   }
 
   Widget pieChartWidget(List<double> pieValues, double total, double value) {
-    return GestureDetector(
-      onTapUp: onTap == null
-          ? null
-          : (details) {
-              final int? index = getIndexOfTappedPie(
-                  pieValues,
-                  total,
-                  gap,
-                  getAngleIn360(start),
-                  getAngleFromCordinates(details.localPosition.dx,
-                      details.localPosition.dy, size / 2));
-              if (index == null) return;
-              onTap!(index);
-            },
-      child: SizedBox(
-        height: size,
-        width: size,
-        child: CustomPaint(
-          painter: _PieChartPainter(
-            pies: children,
-            pieValues: pieValues.map((pieValue) => pieValue * value).toList(),
-            total: total,
-            showValue: showValue,
-            startAngle: start,
-            pieType: pieType,
-            animateFromEnd: animateFromEnd,
-            centerText: child != null ? null : centerText,
-            style: style,
-            centerStyle: centerStyle,
-            gap: gap,
-            borderEdge: borderEdge,
-            borderWidth: borderWidth,
+    int activeIndex = 0;
+    return StatefulBuilder(builder: (context, setState) {
+      return GestureDetector(
+        onTapUp: onTap == null
+            ? null
+            : (details) {
+                final int? index = getIndexOfTappedPie(
+                    pieValues,
+                    total,
+                    gap,
+                    getAngleIn360(start),
+                    getAngleFromCordinates(details.localPosition.dx,
+                        details.localPosition.dy, size / 2));
+                if (index == null) return;
+                setState(() {
+                  activeIndex = index;
+                  onTap!(index);
+                });
+              },
+        child: SizedBox(
+          height: size,
+          width: size,
+          child: CustomPaint(
+            painter: _PieChartPainter(
+                pies: children,
+                pieValues:
+                    pieValues.map((pieValue) => pieValue * value).toList(),
+                total: total,
+                showValue: showValue,
+                startAngle: start,
+                pieType: pieType,
+                animateFromEnd: animateFromEnd,
+                centerText: child != null ? null : centerText,
+                style: style,
+                centerStyle: centerStyle,
+                gap: gap,
+                borderEdge: borderEdge,
+                borderWidth: borderWidth,
+                activeIndex: activeIndex),
+            child: child,
           ),
-          child: child,
         ),
-      ),
-    );
+      );
+    });
   }
 }
