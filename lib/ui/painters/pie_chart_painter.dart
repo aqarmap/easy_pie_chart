@@ -1,6 +1,10 @@
-part of easy_pie_chart;
+import 'dart:math';
 
-class _PieChartPainter extends CustomPainter {
+import 'package:easy_pie_chart/easy_pie_chart.dart';
+import 'package:easy_pie_chart/models/pie_type.dart';
+import 'package:flutter/material.dart';
+
+class EasyPieChartPainter extends CustomPainter {
   final List<double> pieValues;
   final bool showValue;
   final List<PieData> pies;
@@ -14,8 +18,10 @@ class _PieChartPainter extends CustomPainter {
   final TextStyle? centerStyle;
   final double borderWidth;
   final bool animateFromEnd;
-  final int activeIndex;
-  _PieChartPainter({
+  final int activeSegment;
+  final Color? activeSegmentColor;
+
+  EasyPieChartPainter({
     required this.pieValues,
     required this.pies,
     required this.showValue,
@@ -26,7 +32,8 @@ class _PieChartPainter extends CustomPainter {
     required this.borderEdge,
     required this.borderWidth,
     required this.animateFromEnd,
-    required this.activeIndex,
+    required this.activeSegment,
+    required this.activeSegmentColor,
     this.centerText,
     this.style,
     this.centerStyle,
@@ -53,14 +60,23 @@ class _PieChartPainter extends CustomPainter {
 
       /// if gap is greater than 0 and current index is not divisible,
       /// it means current pie is a gap arc so it color will be transparent
+      final actualSegmentIndex = index ~/ (gap == 0.0 ? 1 : 2);
+      final isActiveSegment = actualSegmentIndex == activeSegment;
+      final segmentColor = (isActiveSegment && activeSegmentColor != null)
+          ? activeSegmentColor
+          : pies[actualSegmentIndex].color;
+
+      // gap > 0.0 && index % 2 != 0
+      //     ? Colors.transparent
+      //     : ((isActiveSegment && activeSegmentColor != null)
+      //         ? activeSegmentColor
+      //         : pies[index ~/ (gap == 0.0 ? 1 : 2)].color),
       drawPieArc(
         pieValues[index],
-        gap > 0.0 && index % 2 != 0
-            ? Colors.transparent
-            : pies[index ~/ (gap == 0.0 ? 1 : 2)].color,
+        gap > 0.0 && index % 2 != 0 ? Colors.transparent : segmentColor!,
         size,
         canvas,
-        activeIndex == index,
+        isActiveSegment ? borderWidth * 2 : borderWidth,
       );
 
       /// If showValue is set to true, the pieValue may be displayed. Additionally,
@@ -86,8 +102,13 @@ class _PieChartPainter extends CustomPainter {
     return true;
   }
 
-  void drawPieArc(double pieValue, Color pieColor, Size size, Canvas canvas,
-      bool isActive) {
+  void drawPieArc(
+    double pieValue,
+    Color pieColor,
+    Size size,
+    Canvas canvas,
+    double stockWidth,
+  ) {
     // Draw the curved border for the partition
     final radius = size.width / 2;
     final rect = Rect.fromCircle(
@@ -102,7 +123,8 @@ class _PieChartPainter extends CustomPainter {
           pieType == PieType.fill ? PaintingStyle.fill : PaintingStyle.stroke
 
       /// Set border width
-      ..strokeWidth = isActive ? borderWidth * 2 : borderWidth
+      ..strokeWidth = stockWidth
+      //..strokeWidth = borderWidth
       ..strokeCap = borderEdge;
     canvas.drawArc(
       rect,

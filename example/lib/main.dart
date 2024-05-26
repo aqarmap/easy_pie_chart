@@ -1,4 +1,5 @@
 import 'package:easy_pie_chart/easy_pie_chart.dart';
+import 'package:easy_pie_chart/models/pie_type.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -70,6 +71,7 @@ class _ExampleState extends State<Example> {
                       gap: 0.02,
                       start: 0,
                       size: 130,
+                      activeSegment: 0,
                     ),
                     EasyPieChart(
                       key: const Key('pie 2'),
@@ -83,6 +85,7 @@ class _ExampleState extends State<Example> {
                       start: 0,
                       animateFromEnd: true,
                       size: 130,
+                      activeSegment: 0,
                       child: Center(child: Text(tapIndex)),
                     ),
                   ],
@@ -103,6 +106,7 @@ class _ExampleState extends State<Example> {
                       pieType: PieType.triCrust,
                       onTap: (index) {},
                       size: 130,
+                      activeSegment: 0,
                     ),
                     EasyPieChart(
                       key: const Key('pie 4'),
@@ -112,6 +116,7 @@ class _ExampleState extends State<Example> {
                       animateFromEnd: true,
                       borderWidth: 10,
                       size: 130,
+                      activeSegment: 0,
                     ),
                   ],
                 ),
@@ -130,6 +135,7 @@ class _ExampleState extends State<Example> {
                       onTap: (index) {},
                       start: 180,
                       size: 130,
+                      activeSegment: 0,
                     ),
                     EasyPieChart(
                       key: const Key('pie 6'),
@@ -139,6 +145,7 @@ class _ExampleState extends State<Example> {
                       start: 180,
                       animateFromEnd: true,
                       size: 130,
+                      activeSegment: 0,
                     ),
                   ],
                 ),
