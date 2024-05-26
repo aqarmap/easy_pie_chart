@@ -110,14 +110,15 @@ class EasyPieChart extends StatelessWidget {
         onTapUp: onTap == null
             ? null
             : (details) {
-                final int? index = getIndexOfTappedPie(
-                    pieValues,
-                    total,
-                    gap,
-                    getAngleIn360(start),
-                    getAngleFromCordinates(details.localPosition.dx,
-                        details.localPosition.dy, size / 2));
-                if (index == null) return;
+                final int index = getIndexOfTappedPie(
+                        pieValues,
+                        total,
+                        gap,
+                        getAngleIn360(start),
+                        getAngleFromCordinates(details.localPosition.dx,
+                            details.localPosition.dy, size / 2)) ??
+                    0;
+                // if (index == null) return;
                 setState(() {
                   print('Before setState index= $index');
                   print('Before etState activeIndex= $activeIndex');
