@@ -69,7 +69,7 @@ class EasyPieChart extends StatelessWidget {
   /// Function triggered when a pie slice is tapped. Provides the index of the pie value.
   final void Function(int index)? onTap;
   const EasyPieChart({
-    key,
+    Key? key,
     required this.children,
     this.showValue = true,
     this.start = -90,
@@ -88,7 +88,7 @@ class EasyPieChart extends StatelessWidget {
     this.size = 200,
     required this.activeSegment,
     this.activeSegmentColor,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

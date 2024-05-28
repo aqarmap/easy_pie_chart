@@ -5,6 +5,7 @@ import 'package:easy_pie_chart/easy_pie_chart.dart';
 abstract class Utils {
   /// Extracts the values of each [PieData]. If [gap] > 0.0, includes gaps between values.
   static List<double> getValues(List<PieData> pies, double gap) {
+    pies.removeWhere((element) => element.value == 0.0);
     final List<double> pieValues = [];
     for (var pie in pies) {
       if (gap > 0.0) {
