@@ -1,6 +1,6 @@
 part of easy_pie_chart;
 
-class EasyPieChart extends StatefulWidget {
+class EasyPieChart extends StatelessWidget {
   /// Represents a list of [PieData] objects, where each [PieData] holds a value and a color.
   /// The pie chart will be divided into partitions, each corresponding to an item in [children].
   ///
@@ -91,30 +91,15 @@ class EasyPieChart extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<EasyPieChart> createState() => _EasyPieChartState();
-}
-
-class _EasyPieChartState extends State<EasyPieChart> {
-  late final List<double> pieValues;
-  late final double total;
-  @override
-  void initState() {
-    super.initState();
-    pieValues = Utils.getValues(widget.children, widget.gap);
-    total = pieValues.reduce(((value, element) => value + element));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // final List<double> pieValues = Utils.getValues(widget.children, widget.gap);
-    // final double total =
-    //     pieValues.reduce(((value, element) => value + element));
+    final List<double> pieValues = Utils.getValues(children, gap);
+    final double total =
+        pieValues.reduce(((value, element) => value + element));
 
-    return widget.shouldAnimate
+    return shouldAnimate
         ? TweenAnimationBuilder<double>(
             tween: Tween(begin: 0.00000000001, end: 1.0),
-            duration:
-                widget.animateDuration ?? const Duration(milliseconds: 1500),
+            duration: animateDuration ?? const Duration(milliseconds: 1500),
             builder: (context, value, _) {
               return pieChartWidget(pieValues, total, value);
             })
@@ -123,41 +108,41 @@ class _EasyPieChartState extends State<EasyPieChart> {
 
   Widget pieChartWidget(List<double> pieValues, double total, double value) {
     return GestureDetector(
-      onTapUp: widget.onTap == null
+      onTapUp: onTap == null
           ? null
           : (details) {
               final int? index = Utils.getIndexOfTappedPie(
                   pieValues,
                   total,
-                  widget.gap,
-                  Utils.getAngleIn360(widget.start),
+                  gap,
+                  Utils.getAngleIn360(start),
                   Utils.getAngleFromCordinates(details.localPosition.dx,
-                      details.localPosition.dy, widget.size / 2));
+                      details.localPosition.dy, size / 2));
               if (index == null) return;
-              widget.onTap!(index);
+              onTap!(index);
             },
       child: SizedBox(
-        height: widget.size,
-        width: widget.size,
+        height: size,
+        width: size,
         child: CustomPaint(
           painter: EasyPieChartPainter(
-            pies: widget.children,
+            pies: children,
             pieValues: pieValues.map((pieValue) => pieValue * value).toList(),
             total: total,
-            showValue: widget.showValue,
-            startAngle: widget.start,
-            pieType: widget.pieType,
-            animateFromEnd: widget.animateFromEnd,
-            centerText: widget.child != null ? null : widget.centerText,
-            style: widget.style,
-            centerStyle: widget.centerStyle,
-            gap: widget.gap,
-            borderEdge: widget.borderEdge,
-            borderWidth: widget.borderWidth,
-            activeSegment: widget.activeSegment,
-            activeSegmentColor: widget.activeSegmentColor,
+            showValue: showValue,
+            startAngle: start,
+            pieType: pieType,
+            animateFromEnd: animateFromEnd,
+            centerText: child != null ? null : centerText,
+            style: style,
+            centerStyle: centerStyle,
+            gap: gap,
+            borderEdge: borderEdge,
+            borderWidth: borderWidth,
+            activeSegment: activeSegment,
+            activeSegmentColor: activeSegmentColor,
           ),
-          child: widget.child,
+          child: child,
         ),
       ),
     );
